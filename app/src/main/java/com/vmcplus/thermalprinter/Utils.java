@@ -18,34 +18,6 @@ public class Utils {
             "0100", "0101", "0110", "0111", "1000", "1001", "1010", "1011",
             "1100", "1101", "1110", "1111" };
 
-    public static byte[] decodeBitmap(Bitmap bitmap, int yStart){
-
-        int width = bitmap.getWidth();
-        int height = bitmap.getHeight();
-
-        List<String> list = new ArrayList<String>(); //binaryString list
-        StringBuffer buffer;
-
-        for(int x = 0; x < width; x++){
-            buffer = new StringBuffer();
-            for (int y = yStart; y < yStart + 8; y++) {
-                try {
-                    int color = bitmap.getPixel(x, y);
-                    int r = (color >> 16) & 0xff;
-                    int g = (color >> 8) & 0xff;
-                    int b = color & 0xff;
-
-                    // if color close to white，bit='0', else bit='1'
-                    if (r > 160 && g > 160 && b > 160) buffer.append("0");
-                    else buffer.append("1");
-                }catch (Exception e){ }
-            }
-            list.add(buffer.toString());
-        }
-        List<String> bmpHexList = binaryListToHexStringList(list);
-        return hexList2Byte(bmpHexList);
-    }
-
     public static List<String> binaryListToHexStringList(List<String> list) {
         List<String> hexList = new ArrayList<String>();
         for (String binaryStr : list) {

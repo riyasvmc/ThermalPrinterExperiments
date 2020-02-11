@@ -36,7 +36,6 @@ class Singleton: Application(){
                 Toast.makeText(context, "Enable Bluetooth!", Toast.LENGTH_SHORT).show()
             }
         }
-
     }
 
     override fun onCreate(){
