@@ -19,8 +19,17 @@ public class RasterPrinting {
             "1100", "1101", "1110", "1111" };
 
     public static byte[] decodeBitmap(Bitmap bitmap){
-        int width = 384;    String widthHex = "30" + "00";
-        int height = 512;   String heightHex = "00" + "02";
+        int width = 48 * 8; /* 384px*/
+        int height = 220;   /* 220px*/
+        String commandHexString = // GS v 0 m xL xH yL yH d1...dk
+                "1D" + //GS
+                "76" + //v
+                "30" + //0
+                "00" + //m, mode = 00, 01, 02, 03
+                "30" + //xL // width
+                "00" + //xH
+                "DC" + //yL // height
+                "00";  //yH
 
         List<String> list = new ArrayList<String>(); //binaryString list
         StringBuffer stringBuffer;
@@ -35,18 +44,19 @@ public class RasterPrinting {
                 int b = color & 0xff;
 
                 // if color close to white，bit='0', else bit='1'
-                if (r > 160 && g > 160 && b > 160)
+                if (r > 160 && g > 160 && b > 160) {
                     stringBuffer.append("0");
-                else
+                }
+                else {
                     stringBuffer.append("1");
+                }
             }
             list.add(stringBuffer.toString());
         }
 
         List<String> bmpHexList = binaryListToHexStringList(list);
-        String commandHexString = "1D" + "76" + "30" + "00" + widthHex + heightHex; // GS v 0 m xL xH yL yH d1...dk
 
-        List<String> commandList = new ArrayList<String>();
+        List<String> commandList = new ArrayList<>();
         commandList.add(commandHexString);
         commandList.addAll(bmpHexList);
 
@@ -88,7 +98,7 @@ public class RasterPrinting {
     }
 
     public static byte[] hexList2Byte(List<String> list) {
-        List<byte[]> commandList = new ArrayList<byte[]>();
+        List<byte[]> commandList = new ArrayList<>();
 
         for (String hexStr : list) {
             commandList.add(hexStringToBytes(hexStr));
